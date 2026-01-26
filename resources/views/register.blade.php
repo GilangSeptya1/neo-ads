@@ -67,10 +67,10 @@
                         <label class="cursor-pointer flex items-start gap-2">
                             <input type="checkbox" name="agree" class="checkbox checkbox-sm" required>
                             <span class="text-sm">
-                                Saya menyetujui
-                                <a href="/privacy-policy" class="text-blue-900 underline">Kebijakan Privasi</a>
+                                Saya setuju dengan 
+                                <a href="/privacy-policy" class="text-blue-900 underline">Kebijakan Privasi Data</a>
                                 dan
-                                <a href="/terms" class="text-blue-900 underline">Syarat & Ketentuan</a>
+                                <a class="text-sm">dan memberikan persetujuan untuk pemrosesan data pribadi saya.</a>
                             </span>
                         </label>
                     </div>
