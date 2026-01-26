@@ -5,7 +5,7 @@
 @section('content')
 <div class="bg-white rounded-lg border border-gray-200 p-8 max-w-5xl">
 
-    <h1 class="text-2xl font-semibold text-blue-900 mb-6">
+    <h1 class="text-2xl font-bold text-gray-400 mb-6">
         Buat Iklan Baru
     </h1>
 

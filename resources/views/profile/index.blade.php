@@ -8,16 +8,16 @@
 
     {{-- Header --}}
     <div>
-        <h1 class="text-2xl font-semibold text-gray-900">Profile</h1>
+        <h1 class="text-4xl font-semibold text-gray-500">Profile</h1>
     </div>
 
-    <form action="{{ route('profile.update') }}" method="POST" class="space-y-8">
+    <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
         @csrf
         @method('PUT')
 
         {{-- ================= Informasi Perusahaan ================= --}}
         <section class="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 class="text-lg font-semibold text-blue-900 mb-6">
+            <h2 class="text-2xl font-bold text-gray-400 mb-6">
                 Informasi Perusahaan
             </h2>
 
@@ -112,7 +112,7 @@
 
         {{-- ================= Penanggung Jawab ================= --}}
         <section class="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 class="text-lg font-semibold text-blue-900 mb-6">
+            <h2 class="text-2xl font-bold text-gray-400 mb-6">
                 Informasi Penanggung Jawab
             </h2>
 

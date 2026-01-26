@@ -6,7 +6,7 @@
 <div class="space-y-6">
 
     {{-- Header --}}
-    <h1 class="text-2xl font-semibold text-gray-900">Pembayaran</h1>
+    <h1 class="text-4xl font-semibold text-gray-500">Pembayaran</h1>
 
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
