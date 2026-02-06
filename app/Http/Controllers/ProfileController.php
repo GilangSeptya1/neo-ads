@@ -73,4 +73,19 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Profil berhasil diperbarui!');
     }
+    
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        $path = $request->file('photo')->store('profile', 'public');
+
+        auth()->user()->update([
+            'photo' => 'storage/' . $path
+        ]);
+
+        return back();
+    }
 }

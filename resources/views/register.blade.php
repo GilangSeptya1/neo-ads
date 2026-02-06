@@ -11,9 +11,8 @@
         <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
             <div class="max-w-md w-full">
                 <div class="text-center mb-8">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="mx-auto w-20">
-                    <h2 class="text-2xl font-bold">NeoAds</h2>
-                    <p class="text-gray-500">Daftarkan akun baru Anda</p>
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="mx-auto w-24 mt-8">
+                    <h2 class="text-2xl font-bold text-[#1a2d6d]">NeoAds</h2>
                 </div>
                 
 <form action="{{ route('register.post') }}" method="POST">
@@ -60,6 +59,20 @@
         </div>
     </label>
     <input type="password" name="password" placeholder="xxxxx" required 
+        class="input input-bordered w-full rounded-2xl border-slate-400 focus:border-[#1a2e6b] focus:outline-none h-14 text-lg px-6" />
+</div>
+<div class="form-control mb-4 text-left">
+    <label class="label">
+        <div style="display: flex !important; flex-direction: row !important; align-items: center !important; gap: 0.6rem;">
+            <div class="flex items-center justify-center w-7 h-7 rounded-full bg-[#1a2e6b] shrink-0">
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+            </div>
+            <span class="font-bold text-[#1a2e6b] text-xl">Konfirmasi Kata Sandi</span>
+        </div>
+    </label>
+    <input type="password" name="password_confirmation" placeholder="xxxxx" required 
         class="input input-bordered w-full rounded-2xl border-slate-400 focus:border-[#1a2e6b] focus:outline-none h-14 text-lg px-6" />
 </div>
 

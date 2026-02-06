@@ -39,7 +39,7 @@
                         <td class="px-6 py-3">{{ $loop->iteration }}</td>
                         <td class="px-6 py-3 font-medium">{{ $item->judul_iklan }}</td>
                         <td class="px-6 py-3">{{ $item->target_lokasi }}</td>
-                        <td class="px-6 py-3"></td>
+                        <td class="px-6 py-3">{{ $item->target_kendaraan }}</td>
                         <td class="px-6 py-3">{{ $item->tanggal_mulai }}</td>
                         <td class="px-6 py-3">{{ $item->tanggal_berakhir }}</td>
                         <td class="px-6 py-3">Rp{{ number_format($item->total_budget,0,',','.') }}</td>
@@ -50,18 +50,36 @@
                         </td>
                         <td class="px-6 py-3">
                             <div class="flex justify-center gap-2">
-                                <a href=""
-                                   class="w-7 h-7 flex items-center justify-center rounded bg-yellow-400 text-white">
-                                    <i class="fa fa-pencil-alt text-white"></i>
+
+                                {{-- DETAIL --}}
+                                <a href="{{ route('iklan.show', $item->id) }}"
+                                class="w-7 h-7 flex items-center justify-center rounded bg-blue-600 text-white"
+                                title="Detail">
+                                    <i class="fa-solid fa-eye text-xs"></i>
                                 </a>
-                                <form method="POST" action="">
-                                    @csrf @method('DELETE')
-                                    <button class="w-7 h-7 flex items-center justify-center rounded bg-red-500 text-white">
-                                    <i class="fa-solid fa-trash"></i>
+
+                                {{-- EDIT --}}
+                                <a href=""
+                                class="w-7 h-7 flex items-center justify-center rounded bg-yellow-400 text-white"
+                                title="Edit">
+                                    <i class="fa fa-pencil-alt text-xs"></i>
+                                </a>
+
+                                {{-- DELETE --}}
+                                <form method="POST" action=""
+                                    onsubmit="return confirm('Yakin hapus iklan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        class="w-7 h-7 flex items-center justify-center rounded bg-red-500 text-white"
+                                        title="Hapus">
+                                        <i class="fa-solid fa-trash text-xs"></i>
                                     </button>
                                 </form>
+
                             </div>
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>

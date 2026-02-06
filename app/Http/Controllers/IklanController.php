@@ -28,6 +28,7 @@ class IklanController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'lokasi' => 'required|string',
+            'kendaraan' => 'required|string',
             'mulai' => 'required|date',
             'tujuan' => 'required|in:Brand Awareness,Promotion,Event',
             'eksposur' => 'required|numeric',
@@ -40,6 +41,7 @@ class IklanController extends Controller
         $iklan->user_id = $user->id;
         $iklan->judul_iklan = $request->judul;
         $iklan->target_lokasi = $request->lokasi;
+        $iklan->target_kendaraan = $request->kendaraan;
         $iklan->tanggal_mulai = $request->mulai;
         $iklan->tanggal_berakhir = $request->berakhir;
         
@@ -58,4 +60,26 @@ class IklanController extends Controller
 
         return redirect()->route('iklan.index')->with('success', 'Iklan berhasil dibuat!');
     }
+    public function show($id)
+    {
+        $iklan = Iklan::findOrFail($id);
+        return view('iklan.detail', compact('iklan'));
+    }
+    public function uploadStiker(Request $request, $id)
+    {
+        $request->validate([
+            'stiker' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
+        ]);
+
+        $iklan = Iklan::findOrFail($id);
+
+        $path = $request->file('stiker')->store('stiker-iklan', 'public');
+
+        // simpan path ke DB
+        $iklan->stiker = $path;
+        $iklan->save();
+
+        return back()->with('success', 'Stiker berhasil diupload');
+    }
+
 }

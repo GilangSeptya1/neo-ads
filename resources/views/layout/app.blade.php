@@ -32,18 +32,45 @@
         <div class="px-6 py-4 flex items-center gap-3">
             <div class="relative inline-block">
                 <!-- FOTO PROFIL -->
-                <img
-                    src="{{ asset('images/profile.png') }}"
-                    class="w-10 h-10 rounded-full cursor-pointer"
-                    onclick="toggleDropdown()"
-                    alt="Profile"
-                >
+                <div class="relative">
+                    <img
+                        src="{{ asset(Auth::user()->photo ?? 'images/profile.png') }}"
+                        class="w-10 h-10 rounded-full cursor-pointer object-cover"
+                        onclick="toggleDropdown()"
+                        alt="Profile"
+                    >
+
+                </div>
+                <form
+                    id="photoForm"
+                    method="POST"
+                    action="{{ route('profile.photo') }}"
+                    enctype="multipart/form-data"
+                    class="hidden"
+                > 
+                    @csrf
+                    <input
+                        type="file"
+                        name="photo"
+                        id="photoInput"
+                        accept="image/png,image/jpeg"
+                        onchange="this.form.submit()"
+                    >
+                </form>
 
                 <!-- DROPDOWN -->
                 <div
                     id="profileDropdown"
                     class="hidden absolute left-full top-0 ml-3 w-40 bg-white border rounded shadow-lg z-50"
-                >
+                >   
+                    <button
+                        type="button"
+                        onclick="openPhotoPicker()"
+                        class="flex items-center w-full text-left px-4 py-2 hover:bg-gray-100 text-blue-900"
+                    >
+                        <i class="fa-solid fa-image mr-3"></i>
+                        Ganti Foto
+                    </button>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                     <button type="submit" class="flex items-center w-full text-left px-4 py-2 hover:bg-gray-100" style="color: #0b1a3d;">
@@ -120,18 +147,18 @@
 
 <script>
 function toggleDropdown() {
+    event.stopPropagation();
     document.getElementById('profileDropdown').classList.toggle('hidden');
 }
 
-// optional: klik di luar → dropdown nutup
-document.addEventListener('click', function (event) {
-    const dropdown = document.getElementById('profileDropdown');
-    const profile = event.target.closest('img');
-
-    if (!profile && !dropdown.contains(event.target)) {
-        dropdown.classList.add('hidden');
-    }
+document.addEventListener('click', function () {
+    document.getElementById('profileDropdown').classList.add('hidden');
 });
+
+function openPhotoPicker() {
+    event.stopPropagation();
+    document.getElementById('photoInput').click();
+}
 </script>
 
 </body>

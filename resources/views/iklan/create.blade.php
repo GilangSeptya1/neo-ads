@@ -31,6 +31,12 @@
             <input type="text" class="input" name="lokasi">
         </div>
 
+        {{-- Kendaraan --}}
+        <div>
+            <label class="label">Target Kendaraan*</label>
+            <input type="text" class="input" name="kendaraan">
+        </div>
+
         {{-- Eksposur --}}
         <div>
             <label class="label">Target Eksposur Tercapai (KM)*</label>
