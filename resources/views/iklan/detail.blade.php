@@ -145,14 +145,14 @@
         {{-- BUTTON --}}
         <div class="col-span-2 flex justify-end gap-3 mt-4">
             <a href="{{ route('iklan.index') }}"
-               class="px-6 py-2 rounded border text-sm">
+               class="px-6 py-2 rounded bg-blue-900 text-white text-sm hover:bg-blue-800">
                 Simpan
             </a>
 
-            <button
+            {{-- <button
                 class="px-6 py-2 rounded bg-blue-900 text-white text-sm hover:bg-blue-800">
                 Submit
-            </button>
+            </button> --}}
         </div>
 
     </form>
