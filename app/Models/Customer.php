@@ -35,4 +35,21 @@ class Customer extends Model
     {
         return $this->belongsTo(CustomerCategory::class, 'customer_category_id');
     }
+
+    public function users()
+    {
+        return $this->hasMany(CustomerUser::class);
+    }
+
+    //muttator name to uppercase each word
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtoupper($value);
+    }
+
+    //mutator NPWP_number to only accept digits
+    public function setNPWPNumberAttribute($value)
+    {
+        $this->attributes['NPWP_number'] = preg_replace('/\D/', '', $value);
+    }
 }

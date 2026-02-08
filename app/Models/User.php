@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Notifications\VerifyEmailIndo;
 use App\Notifications\ResetPasswordIndo;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
+use App\Enums\Role;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -54,8 +55,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new VerifyEmailIndo);
     }
+
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordIndo($token));
+    }
+
+    public function role()
+    {
+        return Role::CUSTOMER->value;
     }
 }

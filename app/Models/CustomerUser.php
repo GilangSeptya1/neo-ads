@@ -29,4 +29,20 @@ class CustomerUser extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getEmailAttribute()
+    {
+        return $this->user?->email;
+    }
+
+    // mutator to set phone number to remove any non-digit characters
+    // if begin with 0 replace with country code 62
+    public function setPhoneAttribute($value)
+    {
+        $phone = preg_replace('/\D/', '', $value);
+        if (substr($phone, 0, 1) === '0') {
+            $phone = '62' . substr($phone, 1);
+        }
+        $this->attributes['phone'] = $phone;
+    }
 }

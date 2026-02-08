@@ -6,73 +6,38 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IklanController;
 use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerProfileController;
+use App\Http\Controllers\AccountController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 
-Route::get('/login', function () {
-    return view('login');
-});
+Route::get('/', [AuthController::class, 'showLogin'])->name('home');
 
 // Rute untuk memproses form login
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 
-
 // Rute logout
-Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    return redirect('/login');
-})->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/forgot-password', [AuthController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [AuthController::class, 'reset'])->name('password.update');
-
 Route::get('/email/verify', function () {
     return view('verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
-
-    $user = User::findOrFail($id);
-
-    // Validasi hash email
-    if (! hash_equals(
-        sha1($user->getEmailForVerification()),
-        $hash
-    )) {
-        abort(403, 'Link verifikasi tidak valid.');
-    }
-
-    if (! $user->hasVerifiedEmail()) {
-        $user->markEmailAsVerified();
-    }
-
-    return redirect('/login')->with(
-        'success',
-        'Email berhasil diverifikasi, silakan login.'
-    );
-
-})->name('verification.verify');
-
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->name('verification.verify');
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-
     return back()->with('success', 'Link verifikasi telah dikirim ulang.');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
 Route::get('/register', function () {
     return view('register');
 });
-
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
 Route::get('/auth/google', [AuthController::class, 'redirectGoogle']);
 Route::get('/auth/google/callback', [AuthController::class, 'callbackGoogle']);
 
@@ -95,11 +60,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [PembayaranController::class, 'index'])->name('pembayaran.index');
     });
     
-    // Profile Routes
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
-        Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::put('/update1', [ProfileController::class, 'update1'])->name('profile.update1');
-        Route::post('/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
-    });
+    // Customer Profile Routes
+    Route::prefix('customer-profile')
+        ->name('customer-profile.')
+        ->controller(CustomerProfileController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::put('/update', 'update')->name('update');
+            Route::put('/contact', 'updateContact')->name('update-contact');
+        });
+
+    Route::prefix('profile')
+        ->name('profile.')
+        ->controller(AccountController::class)
+        ->group(function () {
+            Route::post('/photo', 'updatePhoto')->name('update-photo');
+            Route::get('/change-password', 'index')->name('index');
+            Route::post('/change-password', 'update')->name('update-password');
+        });
 });
