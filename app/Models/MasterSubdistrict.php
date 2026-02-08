@@ -16,4 +16,14 @@ class MasterSubdistrict extends Model
         'code',
         'postal_code',
     ];
+
+    public function district()
+    {
+        return $this->belongsTo(MasterDistrict::class, 'district_id');
+    }
+
+    public function city()
+    {
+        return $this->district->city();
+    }
 }

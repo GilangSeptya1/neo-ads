@@ -15,4 +15,10 @@ class MasterCity extends Model
         'name',
         'code',
     ];
+
+    public function province()
+    {
+        return $this->belongsTo(MasterProvince::class, 'province_id');
+    }
 }
+

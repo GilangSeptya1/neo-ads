@@ -15,4 +15,10 @@ class MasterDistrict extends Model
         'name',
         'code',
     ];
+
+    public function city()
+    {
+        return $this->belongsTo(MasterCity::class, 'city_id');
+    }
 }
+
