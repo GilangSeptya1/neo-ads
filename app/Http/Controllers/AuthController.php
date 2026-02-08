@@ -12,13 +12,15 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\PasswordReset;
+use App\Enums\Role;
+use App\Facades\ActivityLog;
 
 class AuthController extends Controller
 {    
     public function showLogin()
     {
         if (Auth::check()) {
-            return redirect('/profile');
+            return redirect('/customer-profile');
         }
 
         return view('login');
@@ -66,6 +68,7 @@ class AuthController extends Controller
         );
 
         if (! $response->json('success')) {
+            ActivityLog::logAuth('failed', 'Failed login attempt - Invalid captcha');
             return back()->withErrors(['captcha' => 'Captcha tidak valid']);
         }
 
@@ -78,14 +81,21 @@ class AuthController extends Controller
             // 🔥 CEK EMAIL VERIFIED
             if (! Auth::user()->hasVerifiedEmail()) {
                 Auth::logout();
-
+                ActivityLog::logAuth('failed', 'Failed login attempt - Email not verified');
                 return back()->withErrors([
                     'email' => 'Email belum diverifikasi. Silakan cek email Anda.',
                 ]);
             }
 
-            return redirect()->intended('/profile');
+            if(Auth::user()->role() == Role::CUSTOMER->value){
+                ActivityLog::logAuth('login', 'Customer logged in successfully');
+                return redirect()->intended('/customer-profile');
+            }else{
+                ActivityLog::logAuth('login', 'Admin logged in successfully');
+                return redirect()->intended('/dashboard');
+            }
         }
+        ActivityLog::logAuth('failed', 'Failed login attempt - Invalid credentials');
         return back()->withErrors([
             'email' => 'Email atau kata sandi yang Anda masukkan salah.',
         ])->onlyInput('email');
@@ -111,7 +121,32 @@ class AuthController extends Controller
 
          $user->sendEmailVerificationNotification();
 
+        ActivityLog::logCreated('user', 'Registered new account', 'App\Models\User', $user->id, $user->toArray());
         return redirect('/login')->with('success', 'Akun berhasil dibuat! Silakan masuk.');
+    }
+
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+       $user = User::findOrFail($id);
+
+        // Validasi hash email
+        if (! hash_equals(
+            sha1($user->getEmailForVerification()),
+            $hash
+        )) {
+            abort(403, 'Link verifikasi tidak valid.');
+        }
+
+        if (! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
+        ActivityLog::logUpdated('user', 'Verified email address', 'App\Models\User', $user->id, $user->toArray());
+
+        return redirect('/login')->with(
+            'success',
+            'Email berhasil diverifikasi, silakan login.'
+        );
     }
 
     public function redirectGoogle()
@@ -134,7 +169,12 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/profile');
+        ActivityLog::logAuth('login', 'Logged in with Google account');
+        if(Auth::user()->role() == Role::CUSTOMER->value){
+            return redirect('/customer-profile');
+        }else{  
+            return redirect('/dashboard');
+        }
     }
 
     public function showLinkRequestForm()
@@ -152,6 +192,7 @@ class AuthController extends Controller
             $request->only('email')
         );
 
+        ActivityLog::logAuth('info', 'Password reset link requested for email: ' . $request->email);
         return $status === Password::RESET_LINK_SENT
             ? back()->with('success', 'Link reset password telah dikirim ke email Anda.')
             : back()->withErrors(['email' => 'Gagal mengirim email reset password.']);
@@ -182,8 +223,19 @@ class AuthController extends Controller
             }
         );
 
+        ActivityLog::logAuth('info', 'Password reset attempt for email: ' . $request->email);
+
         return $status === Password::PASSWORD_RESET
             ? redirect('/login')->with('success', 'Password berhasil diubah, silakan login.')
             : back()->withErrors(['email' => 'Token reset tidak valid atau kadaluarsa.']);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
 }
