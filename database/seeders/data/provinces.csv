@@ -1,0 +1,38 @@
+﻿id;name;code
+1;Aceh (NAD);11
+2;Sumatera Utara;12
+3;Sumatera Barat;13
+4;Riau;14
+5;Jambi;15
+6;Sumatera Selatan;16
+7;Bengkulu;17
+8;Lampung;18
+9;Kepulauan Bangka Belitung;19
+10;Kepulauan Riau;21
+11;DKI Jakarta;31
+12;Jawa Barat;32
+13;Jawa Tengah;33
+14;DI Yogyakarta;34
+15;Jawa Timur;35
+16;Banten;36
+17;Bali;51
+18;Nusa Tenggara Barat (NTB);52
+19;Nusa Tenggara Timur (NTT);53
+20;Kalimantan Barat;61
+21;Kalimantan Tengah;62
+22;Kalimantan Selatan;63
+23;Kalimantan Timur;64
+24;Kalimantan Utara;65
+25;Sulawesi Utara;71
+26;Sulawesi Tengah;72
+27;Sulawesi Selatan;73
+28;Sulawesi Tenggara;74
+29;Gorontalo;75
+30;Sulawesi Barat;76
+31;Maluku;81
+32;Maluku Utara;82
+33;Papua;91
+34;Papua Barat Daya;92
+35;Papua Selatan;93
+36;Papua Tengah;94
+37;Papua Pegunungan;95
